@@ -5,9 +5,11 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.input.InputEvent;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -59,16 +61,44 @@ public class MyCarsController {
 
     private void bindCheckBoxes() {
         ReadOnlyIntegerProperty selectedIndex = carsListView.getSelectionModel().selectedIndexProperty();
+
+        firstCheckBox.addEventFilter(InputEvent.ANY, InputEvent -> {
+            if (selectedIndex.getValue() == null) {
+                return;
+            }
+            InputEvent.consume();
+        });
         firstCheckBox.selectedProperty().bind(
                 selectedIndex.isEqualTo(0)
         );
+
+        lastCheckBox.addEventFilter(InputEvent.ANY, InputEvent -> {
+            if (selectedIndex.getValue() == null) {
+                return;
+            }
+            InputEvent.consume();
+        });
         lastCheckBox.selectedProperty().bind(
                 selectedIndex.isEqualTo(Bindings.size(cars).subtract(1))
         );
+
+        firstHalfCheckBox.addEventFilter(InputEvent.ANY, InputEvent -> {
+            if (selectedIndex.getValue() == null) {
+                return;
+            }
+            InputEvent.consume();
+        });
         firstHalfCheckBox.selectedProperty().bind(
                 selectedIndex.lessThan(Bindings.size(cars).divide(2))
                 .and(selectedIndex.greaterThanOrEqualTo(0))
         );
+
+        secondHalfCheckBox.addEventFilter(InputEvent.ANY, InputEvent -> {
+            if (selectedIndex.getValue() == null) {
+                return;
+            }
+            InputEvent.consume();
+        });
         secondHalfCheckBox.selectedProperty().bind(
                 selectedIndex.greaterThanOrEqualTo(Bindings.size(cars).divide(2))
         );
@@ -103,12 +133,9 @@ public class MyCarsController {
 
     private void clearCarForm() {
         modelTextField.clear();
-        modelTextField.setPromptText("Model");
-        makerComboBox.setValue("Maker");
+        makerComboBox.setValue(null);
         registrationDatePicker.setValue(null);
-        registrationDatePicker.setPromptText("Registration Date");
         creationYearSpinner.getValueFactory().setValue(2018);
         electricCheckBox.setSelected(false);
     }
-
 }
