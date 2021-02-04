@@ -98,6 +98,17 @@ public class MyCarsController {
                 electricCheckBox.isSelected()
         );
         cars.add(car);
+        clearCarForm();
+    }
+
+    private void clearCarForm() {
+        modelTextField.clear();
+        modelTextField.setPromptText("Model");
+        makerComboBox.setValue("Maker");
+        registrationDatePicker.setValue(null);
+        registrationDatePicker.setPromptText("Registration Date");
+        creationYearSpinner.getValueFactory().setValue(2018);
+        electricCheckBox.setSelected(false);
     }
 
 }
